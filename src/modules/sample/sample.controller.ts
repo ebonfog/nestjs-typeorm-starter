@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiCreatedResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { DeleteResult } from 'src/forms/deleteResult';
 import { ListResult } from 'src/forms/listResult';
+import { RequestQuery } from 'src/forms/requestQuery';
 import { JoiValidationPipe } from 'src/pipes/joi-validate.pipe';
+import { QueryParserPipe } from 'src/pipes/query-parser.pipe';
 import { Sample } from './sample.entity';
 import { SampleService } from './sample.service';
 
@@ -15,7 +17,9 @@ export class SampleController {
 
   @Get()
   @ApiCreatedResponse({type: ListResult})
-  async listSample() {
+  @ApiQuery({type: RequestQuery, required: false})
+  async listSample(@Query(new QueryParserPipe()) query) {
+    console.log(query)
     return this.service.find()
   }
 

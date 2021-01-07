@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { TypeormFilter } from './filters/typeorm.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
+
+  app.useGlobalFilters(new TypeormFilter())
 
   const options = new DocumentBuilder()
     .setTitle('API Documentation')

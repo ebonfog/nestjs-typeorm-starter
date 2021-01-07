@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import * as Joi from 'joi'
 
@@ -16,12 +16,12 @@ export class Sample {
     update: Joi.object(Sample.schema)
   }
   
-  @ApiProperty()
+  @ApiHideProperty()
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @ApiProperty()
-  @Column()
+  @Column({unique: true})
   name?: string
 
   @ApiProperty()
