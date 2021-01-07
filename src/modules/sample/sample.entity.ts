@@ -1,9 +1,20 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import * as Joi from 'joi'
 
 @Entity()
 export class Sample {
-  static schema = {}
+  private static schema = {
+    name: Joi.string(),
+    value: Joi.number(),
+  }
+  static validate = {
+    create: Joi.object({
+      ...Sample.schema,
+      name: Sample.schema.name.required()
+    }),
+    update: Joi.object(Sample.schema)
+  }
   
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
@@ -14,6 +25,6 @@ export class Sample {
   name?: string
 
   @ApiProperty()
-  @Column()
+  @Column({nullable: true})
   value?: number
 }
