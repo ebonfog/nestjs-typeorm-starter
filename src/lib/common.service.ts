@@ -5,7 +5,7 @@ import { FindConditions, FindManyOptions, FindOneOptions, ObjectLiteral, Reposit
 @Injectable()
 export class CommonService<Entity extends ObjectLiteral> {
   constructor(
-    private repository: Repository<Entity>
+    protected repository: Repository<Entity>
   ){}
 
   async find(options: FindManyOptions<Entity> = {}): Promise<{data: Entity[], total: number}> {
