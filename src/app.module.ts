@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Sample } from './modules/sample/sample.entity';
 import { SampleModule } from './modules/sample/sample.module';
+import { User } from './modules/user/user.entity';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -17,10 +19,14 @@ import { SampleModule } from './modules/sample/sample.module';
         type: 'postgres',
         url: config.get('DB_URL'),
         synchronize: true,
-        entities: [Sample]
+        entities: [
+          Sample,
+          User,
+        ]
       })
     }),
-    SampleModule
+    SampleModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],

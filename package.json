@@ -30,6 +30,7 @@
     "@nestjs/swagger": "^4.7.9",
     "@nestjs/typeorm": "^7.1.5",
     "@types/passport-jwt": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "joi": "^17.3.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
