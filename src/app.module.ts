@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -7,11 +8,17 @@ import { SampleModule } from './modules/sample/sample.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DB_URL || 'postgres://guroo:Guroo1q2w3e4r@128.199.64.216:5432/wiztech',
-      synchronize: true,
-      entities: [Sample]
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        url: config.get('DB_URL'),
+        synchronize: true,
+        entities: [Sample]
+      })
     }),
     SampleModule
   ],
