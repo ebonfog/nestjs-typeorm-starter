@@ -6,7 +6,7 @@ import * as Joi from 'joi'
 export class Sample {
   private static schema = {
     name: Joi.string(),
-    value: Joi.number(),
+    value: Joi.number().allow(null),
   }
   static validate = {
     create: Joi.object({
