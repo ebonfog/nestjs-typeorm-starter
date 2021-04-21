@@ -1,17 +1,22 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 import { RequestQuery } from 'src/forms/requestQuery';
-import { Between, MoreThanOrEqual, MoreThan, LessThanOrEqual, LessThan, Not, In, Any } from 'typeorm';
+import { Between, MoreThanOrEqual, MoreThan, LessThanOrEqual, LessThan, Not, In, Any, IsNull } from 'typeorm';
 
 @Injectable()
 export class QueryParserPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
     if (value.where) value.where = this.parseWhere(value.where)
     if (value.order) value.order = JSON.parse(value.order)
+    if (value.limit) {
+      value.take = value.limit
+      delete value.limit
+    }
     return value;
   }
 
   parseWhere = (whereStr: string) => {
     const where = JSON.parse(whereStr, (key, value) => {
+      if (value === null) return IsNull()
       if (typeof value !== 'object') return value
       if (Array.isArray(value)) return value
   
@@ -21,7 +26,7 @@ export class QueryParserPipe implements PipeTransform {
       if(value.hasOwnProperty('gt')) return MoreThan(value.gt)
       if(value.hasOwnProperty('lte')) return LessThanOrEqual(value.lte)
       if(value.hasOwnProperty('lt')) return LessThan(value.lt)
-      if(value.hasOwnProperty('neq')) return Not(value.neq)
+      if(value.hasOwnProperty('neq')) return Not(value.neq === null? IsNull(): value.neq)
       if(value.hasOwnProperty('in')) return In(value.in)
       if(value.hasOwnProperty('any')) return Any(value.any)
       return value
