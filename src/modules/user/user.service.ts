@@ -24,6 +24,13 @@ export class UserService extends CommonService<User> {
     return bcrypt.compareSync(password, hash)
   }
 
+  private generateToken(user: User): string {
+    return this.jwtService.sign({
+      userId: user.id,
+      email: user.email
+    })
+  } 
+
   async create(data: User): Promise<User> {
     const accountData = {
       email: data.email,
@@ -48,10 +55,7 @@ export class UserService extends CommonService<User> {
     const { email, password } = credential
     const user = await this.validateUser(email, password)
     if (!user) throw new UnauthorizedException()
-    const token = this.jwtService.sign({
-      userId: user.id,
-      email: user.email
-    })
+    const token = this.generateToken(user)
     return { token }
   }
 }
