@@ -1,9 +1,10 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import * as Joi from 'joi'
+import { CommonEntity } from "src/lib/common.entity";
 
 @Entity()
-export class Sample {
+export class Sample extends CommonEntity{
   private static schema = {
     name: Joi.string(),
     value: Joi.number().allow(null),
@@ -15,10 +16,6 @@ export class Sample {
     }),
     update: Joi.object(Sample.schema)
   }
-  
-  @ApiHideProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id?: string;
 
   @ApiProperty()
   @Column({unique: true})

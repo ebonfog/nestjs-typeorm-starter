@@ -1,9 +1,10 @@
 import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as Joi from 'joi'
+import { CommonEntity } from "src/lib/common.entity";
 
 @Entity()
-export class User {
+export class User extends CommonEntity{
   private static schema = {
     email: Joi.string().email(),
     password: Joi.string().min(8),
@@ -25,10 +26,6 @@ export class User {
     })
   }
 
-  @ApiHideProperty()
-  @PrimaryGeneratedColumn('uuid')
-  id?: string
-
   @ApiProperty()
   @Column({unique: true})
   email?: string
@@ -37,11 +34,4 @@ export class User {
   @Column({select: false})
   password?: string
 
-  @ApiProperty()
-  @CreateDateColumn({ type: 'timestamp' })
-  createdAt?: Date
-
-  @ApiProperty()
-  @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt?: Date
 }
