@@ -5,26 +5,6 @@ import { CommonEntity } from "src/lib/common.entity";
 
 @Entity()
 export class User extends CommonEntity{
-  private static schema = {
-    email: Joi.string().email(),
-    password: Joi.string().min(8),
-  }
-
-  static validate = {
-    create: Joi.object({
-      email: User.schema.email.required(),
-      password: User.schema.password.required(),
-    }),
-    resetPassword: Joi.object({ password: User.schema.password.required() }),
-    updatePassword: Joi.object({
-      oldPassword: User.schema.password.required(),
-      newPassword: User.schema.password.required(),
-    }),
-    login: Joi.object({
-      email: User.schema.email,
-      password: Joi.string(),
-    })
-  }
 
   @ApiProperty()
   @Column({unique: true})
@@ -34,4 +14,28 @@ export class User extends CommonEntity{
   @Column({select: false})
   password?: string
 
+}
+
+export class UserSchema {
+  private static data = {
+    email: Joi.string().email(),
+    password: Joi.string().min(8),
+  }
+
+  static create = Joi.object({
+    email: UserSchema.data.email.required(),
+    password: UserSchema.data.password.required(),
+  })
+
+  static resetPassword = Joi.object({ password: UserSchema.data.password.required() })
+  
+  static updatePassword = Joi.object({
+    oldPassword: UserSchema.data.password.required(),
+    newPassword: UserSchema.data.password.required(),
+  })
+
+  static login = Joi.object({
+    email: UserSchema.data.email,
+    password: Joi.string(),
+  })
 }
