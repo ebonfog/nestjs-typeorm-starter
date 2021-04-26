@@ -5,7 +5,7 @@ import { ListResult } from 'src/forms/listResult';
 import { RequestQuery } from 'src/forms/requestQuery';
 import { JoiValidationPipe } from 'src/pipes/joi-validate.pipe';
 import { QueryParserPipe } from 'src/pipes/query-parser.pipe';
-import { Sample } from './sample.entity';
+import { Sample, SampleSchema } from './sample.entity';
 import { SampleService } from './sample.service';
 
 @ApiTags('Sample')
@@ -25,7 +25,7 @@ export class SampleController {
 
   @Post()
   @ApiCreatedResponse({type: Sample})
-  async createSample(@Body(new JoiValidationPipe(Sample.validate.create)) data: Sample) {
+  async createSample(@Body(new JoiValidationPipe(SampleSchema.create)) data: Sample) {
     return this.service.create(data)
   }
 
@@ -39,7 +39,7 @@ export class SampleController {
   @Patch(':id')
   @ApiCreatedResponse({type: Sample})
   @ApiParam({name: 'id'})
-  async updateSample(@Param('id') id: string, @Body(new JoiValidationPipe(Sample.validate.update)) data: Sample) {
+  async updateSample(@Param('id') id: string, @Body(new JoiValidationPipe(SampleSchema.update)) data: Sample) {
     return this.service.update(id, data)
   }
 
