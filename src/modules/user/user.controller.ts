@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { JwtAuthResult } from 'src/auth/jwt/jwt.strategy';
 import { JwtTokenResponse, LoginForm } from 'src/forms/authDefult';
 import { ListResult } from 'src/forms/listResult';
 import { RequestQuery } from 'src/forms/requestQuery';
@@ -35,5 +36,12 @@ export class UserController {
   @ApiCreatedResponse({type: JwtTokenResponse})
   async login(@Body(new JoiValidationPipe(UserSchema.login)) data: LoginForm) {
     return this.service.login(data)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiCreatedResponse({type: User})
+  async getOwnUser(@Req() req: JwtAuthResult) {
+    return this.service.findById(req.user.userId)
   }
 }
